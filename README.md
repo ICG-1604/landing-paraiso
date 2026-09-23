@@ -29,8 +29,8 @@ npm run og       # regenera public/og.jpg
 2. **Foto de Alejandra.** Guardarla en `src/assets/equipo/alejandra-gilmartin.jpg`
    (vertical, 4:5) y poner `foto: 'alejandra-gilmartin.jpg'` en `src/data/landing.ts`.
    Mientras tanto se muestran sus iniciales.
-3. **Dominio.** `site` apunta a `https://paraiso.munenlasaulas.es`, igual que el QR de la
-   diapositiva: hay que crear ese subdominio en Vercel.
+3. **Dominio.** Web independiente en `https://landing-paraiso.vercel.app`, sin dominio propio
+   (decisión de Ignacio, 23/09/2026). De ahí salen la URL canónica y la imagen de Open Graph.
 4. **Textos legales.** El pie enlaza a `#`.
 5. **Datos heredados de Claret sin revalidar:** sin permanencia, torneos de 50-65 €,
    calendario de octubre a mayo, grupos de 6 a 15 alumnos.
