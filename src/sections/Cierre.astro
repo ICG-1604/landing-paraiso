@@ -1,0 +1,19 @@
+---
+import Cta from '../components/Cta.astro'
+import Eyebrow from '../components/Eyebrow.astro'
+import { cierre } from '../data/landing'
+---
+<section class="on-dark relative isolate w-full overflow-hidden px-5 py-20 sm:px-8 sm:py-28"
+         style="background:var(--ink);color:var(--on-dark)">
+  <div class="absolute inset-0 -z-10" aria-hidden="true"
+       style="background:linear-gradient(to bottom,rgba(12,26,46,.72),rgba(12,26,46,.94))"></div>
+
+  <div class="mx-auto max-w-[1180px]" data-reveal>
+    <Eyebrow onDark>{cierre.eyebrow}</Eyebrow>
+    <h2 class="t-h2 font-display max-w-[18ch] font-semibold" style="color:#fff">{cierre.title}</h2>
+    <p class="t-lead font-body mt-5 max-w-[52ch]" style="color:var(--on-dark-muted)">{cierre.lead}</p>
+    <div class="mt-9">
+      <Cta evt="cta_cierre_click" origen="cierre" class="w-full sm:w-auto">{cierre.cta}</Cta>
+    </div>
+  </div>
+</section>

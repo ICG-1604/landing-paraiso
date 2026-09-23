@@ -1,0 +1,42 @@
+---
+import Section from '../components/Section.astro'
+import Eyebrow from '../components/Eyebrow.astro'
+import { eventos } from '../data/landing'
+---
+<Section bg="cream" id="eventos">
+  <div class="max-w-[46ch]" data-reveal>
+    <Eyebrow>{eventos.eyebrow}</Eyebrow>
+    <h2 class="t-h2 font-display font-semibold" style="color:var(--ink)">{eventos.title}</h2>
+    <p class="t-lead font-body mt-5" style="color:rgba(12,26,46,.72)">{eventos.lead}</p>
+  </div>
+
+  <ul class="mt-12 grid gap-3 lg:grid-cols-3" role="list">
+    {eventos.lista.map((e, i) => (
+      <li
+        data-reveal
+        style={`transition-delay:${i * 90}ms;background:${e.destacado ? 'var(--navy)' : 'var(--white)'};border:1px solid ${e.destacado ? 'var(--navy)' : 'var(--line)'};border-radius:var(--radius-card-lg)`}
+        class="flex flex-col p-6 sm:p-7"
+      >
+        <p class="font-body text-[0.75rem] font-semibold uppercase"
+           style={`letter-spacing:.16em;color:${e.destacado ? 'var(--gold-bright)' : 'var(--azure)'}`}>
+          {e.fecha}
+        </p>
+        <h3 class="font-display mt-3 text-2xl font-semibold"
+            style={`color:${e.destacado ? '#fff' : 'var(--ink)'}`}>{e.nombre}</h3>
+        <p class="font-body mt-1 text-[0.88rem] font-medium"
+           style={`color:${e.destacado ? 'var(--on-dark-muted)' : 'var(--navy)'}`}>{e.desde}</p>
+        <p class="font-body mt-4 flex-1 text-[0.94rem] leading-relaxed"
+           style={`color:${e.destacado ? 'var(--on-dark-muted)' : 'rgba(12,26,46,.68)'}`}>{e.texto}</p>
+        <p class="font-body mt-5 border-t pt-4 text-[0.86rem] font-medium"
+           style={`border-color:${e.destacado ? 'rgba(255,255,255,.12)' : 'var(--line)'};color:${e.destacado ? 'var(--gold-bright)' : 'var(--gold)'}`}>
+          {e.logro}
+        </p>
+      </li>
+    ))}
+  </ul>
+
+  <p class="font-body mt-6 rounded-[14px] p-5 text-[0.92rem] leading-relaxed"
+     style="background:rgba(44,108,176,.07);color:rgba(12,26,46,.75)" data-reveal>
+    <strong style="color:var(--ink)">{eventos.notaStrong}</strong> {eventos.notaResto}
+  </p>
+</Section>

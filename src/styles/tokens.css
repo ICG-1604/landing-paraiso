@@ -1,0 +1,135 @@
+@import "tailwindcss";
+/* Solo el subconjunto latino: cubre el español y evita cargar alfabetos que la página no usa. */
+@import "@fontsource/fraunces/latin-400.css";
+@import "@fontsource/fraunces/latin-600.css";
+@import "@fontsource/fraunces/latin-400-italic.css";
+@import "@fontsource/fraunces/latin-600-italic.css";
+@import "@fontsource/hanken-grotesk/latin-400.css";
+@import "@fontsource/hanken-grotesk/latin-500.css";
+@import "@fontsource/hanken-grotesk/latin-600.css";
+@import "@fontsource/hanken-grotesk/latin-700.css";
+
+/* ─── Design tokens — heredados de politica-web ─── */
+:root {
+  --ink:         #0C1A2E;
+  --navy:        #143A66;
+  --navy-2:      #1B4D8C;
+  --azure:       #2C6CB0;
+  --azure-soft:  #5B91CC;
+  --gold:        #BE9846;
+  --gold-bright: #D9B765;
+  --gold-soft:   #E7D3A1;
+  --paper:       #F4EEE1;
+  --cream:       #FBF8F1;
+  --white:       #FFFFFF;
+  --line:        rgba(20,58,102,.16);
+  --line-soft:   rgba(20,58,102,.09);
+
+  --on-dark:       #DFE7F1;
+  --on-dark-muted: #9FB0C4;
+  --on-dark-faint: #8295AB;
+
+  --shadow-card: 0 24px 60px -28px rgba(12,26,46,.45);
+
+  /* Alto real del CTA fijo en móvil, para reservar espacio al final de la página */
+  --sticky-h: calc(60px + env(safe-area-inset-bottom, 0px));
+}
+
+@theme inline {
+  --color-ink:         var(--ink);
+  --color-navy:        var(--navy);
+  --color-navy-2:      var(--navy-2);
+  --color-azure:       var(--azure);
+  --color-azure-soft:  var(--azure-soft);
+  --color-gold:        var(--gold);
+  --color-gold-bright: var(--gold-bright);
+  --color-gold-soft:   var(--gold-soft);
+  --color-paper:       var(--paper);
+  --color-cream:       var(--cream);
+  --color-on-dark:       var(--on-dark);
+  --color-on-dark-muted: var(--on-dark-muted);
+  --color-on-dark-faint: var(--on-dark-faint);
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body:    "Hanken Grotesk", system-ui, sans-serif;
+
+  --radius-card:    14px;
+  --radius-card-lg: 20px;
+}
+
+/* ─── Base ─── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  scroll-padding-top: 1rem;
+}
+
+@layer base {
+  body {
+    margin: 0;
+    font-family: var(--font-body);
+    background-color: var(--cream);
+    color: var(--ink);
+    line-height: 1.65;
+  }
+}
+
+/* El CTA fijo no debe tapar el último bloque */
+@media (max-width: 767px) {
+  body { padding-bottom: var(--sticky-h); }
+}
+
+/* ─── Grano ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 60;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+@layer base {
+  h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.05; margin: 0; }
+  p { margin: 0; }
+  img { display: block; max-width: 100%; }
+}
+
+/* ─── Escala tipográfica ─── */
+.t-h1 { font-size: clamp(2.5rem, 7.5vw, 4.6rem); line-height: 1.02; letter-spacing: -0.015em; }
+.t-h2 { font-size: clamp(1.9rem, 4.4vw, 3.1rem); line-height: 1.06; letter-spacing: -0.012em; }
+.t-h3 { font-size: clamp(1.15rem, 2vw, 1.4rem); line-height: 1.15; }
+.t-lead { font-size: clamp(1.05rem, 1.9vw, 1.28rem); line-height: 1.55; }
+
+/* ─── Foco ─── */
+:focus-visible {
+  outline: 2px solid var(--azure);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+.on-dark :focus-visible, .sticky-cta:focus-visible {
+  outline-color: var(--gold-bright);
+}
+
+/* ─── Reveal ─── */
+/* Solo se oculta si el JS ha arrancado: sin JS la página se ve entera. */
+.js [data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1);
+}
+.js [data-reveal].is-in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    transition-duration: .01ms !important;
+  }
+  .js [data-reveal] { opacity: 1; transform: none; transition: none; }
+}

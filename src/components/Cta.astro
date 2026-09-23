@@ -1,0 +1,36 @@
+---
+import { FORM_URL } from '../data/landing'
+interface Props {
+  /** Identificador de analítica: cta_hero_click, cta_pasaclases_click, ... */
+  evt: string
+  /** Origen que se propaga al formulario en el parámetro `origen`. */
+  origen: string
+  block?: boolean
+  variant?: 'solid' | 'outline'
+  class?: string
+}
+const { evt, origen, block = false, variant = 'solid', class: cls = '' } = Astro.props
+const href = `${FORM_URL}${FORM_URL.includes('?') ? '&' : '?'}origen=${origen}`
+---
+<a
+  href={href}
+  data-evt={evt}
+  data-form-cta
+  class:list={[
+    'group inline-flex items-center justify-center gap-2 min-h-[52px] px-7 py-3.5',
+    'rounded-full font-body font-semibold text-[0.98rem] no-underline',
+    'transition-transform duration-200 hover:-translate-y-0.5',
+    block && 'w-full',
+    cls,
+  ]}
+  style={variant === 'solid'
+    ? 'background:var(--gold);color:var(--ink);box-shadow:0 14px 34px -12px rgba(190,152,70,.75)'
+    : 'background:transparent;color:var(--gold-bright);border:1px solid var(--gold)'}
+>
+  <slot />
+  <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"
+       class="transition-transform duration-200 group-hover:translate-x-0.5">
+    <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.6"
+          stroke-linecap="round" stroke-linejoin="round" />
+  </svg>
+</a>

@@ -1,0 +1,164 @@
+---
+import '../styles/tokens.css'
+import { site, faq } from '../data/landing'
+
+const canonical = new URL(Astro.url.pathname, Astro.site).href
+const og = new URL('/og.jpg', Astro.site).href
+
+// Datos estructurados: ficha de curso + FAQ, para la vista previa en buscadores.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Course',
+      name: 'MUN en las aulas · Colegio Paraíso',
+      description: site.description,
+      inLanguage: 'es',
+      provider: { '@type': 'Organization', name: 'MUN en las aulas', url: canonical },
+      offers: {
+        '@type': 'Offer',
+        price: '39',
+        priceCurrency: 'EUR',
+        category: 'Cuota mensual',
+        availability: 'https://schema.org/InStock',
+      },
+      hasCourseInstance: {
+        '@type': 'CourseInstance',
+        courseMode: 'onsite',
+        location: { '@type': 'Place', name: 'Colegio Paraíso', address: 'Madrid' },
+        startDate: '2026-10-01',
+        endDate: '2027-05-31',
+        courseWorkload: 'PT1H',
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: faq.preguntas.map((p) => ({
+        '@type': 'Question',
+        name: p.q,
+        acceptedAnswer: { '@type': 'Answer', text: p.a },
+      })),
+    },
+  ],
+}
+---
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0C1A2E" />
+  <title>{site.title}</title>
+  <meta name="description" content={site.description} />
+  <link rel="canonical" href={canonical} />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_ES" />
+  <meta property="og:title" content={site.title} />
+  <meta property="og:description" content={site.description} />
+  <meta property="og:image" content={og} />
+  <meta property="og:image:alt" content={site.ogAlt} />
+  <meta property="og:url" content={canonical} />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="preload" as="image" href="/hero-poster.jpg" fetchpriority="high" />
+  <script is:inline>document.documentElement.classList.add('js')</script>
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</head>
+<body>
+  <a
+    href="#contenido"
+    class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[70] focus:px-4 focus:py-2 focus:rounded-full focus:font-body focus:text-sm"
+    style="background:var(--gold);color:var(--ink)"
+  >Saltar al contenido</a>
+
+  <slot />
+
+  <script>
+    // Reveal al hacer scroll. Un barrido en cada frame de scroll, en lugar de
+    // IntersectionObserver: con un scroll rápido el observer se salta elementos
+    // y dejaba secciones enteras invisibles.
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    let pendientes = Array.from(document.querySelectorAll('[data-reveal]'))
+
+    if (reduce) {
+      pendientes.forEach((el) => el.classList.add('is-in'))
+      pendientes = []
+    } else {
+      let programado = false
+      const barrer = () => {
+        programado = false
+        const limite = window.innerHeight - 40
+        pendientes = pendientes.filter((el) => {
+          if (el.getBoundingClientRect().top < limite) { el.classList.add('is-in'); return false }
+          return true
+        })
+        if (!pendientes.length) {
+          window.removeEventListener('scroll', pedir)
+          window.removeEventListener('resize', pedir)
+          window.removeEventListener('load', pedir)
+          if (ro) ro.disconnect()
+        }
+      }
+      const pedir = () => {
+        if (!programado) { programado = true; requestAnimationFrame(barrer) }
+      }
+      window.addEventListener('scroll', pedir, { passive: true })
+      window.addEventListener('resize', pedir, { passive: true })
+      // Las imágenes diferidas alargan la página sin disparar scroll: sin esto,
+      // los bloques que entran en pantalla por ese crecimiento se quedan ocultos.
+      let ro: ResizeObserver | undefined
+      if ('ResizeObserver' in window) {
+        ro = new ResizeObserver(pedir)
+        ro.observe(document.body)
+      }
+      window.addEventListener('load', pedir)
+      barrer()
+    }
+
+    // El CTA fijo entra al pasar el hero; antes duplica al CTA principal.
+    const sticky = document.getElementById('sticky-cta')
+    if (sticky) {
+      const link = sticky.querySelector('a')
+      let visible: boolean | null = null
+      const revisar = () => {
+        const debe = window.scrollY > window.innerHeight * 0.75
+        if (debe === visible) return
+        visible = debe
+        sticky.classList.toggle('is-visible', debe)
+        sticky.setAttribute('aria-hidden', debe ? 'false' : 'true')
+        // Fuera de pantalla no debe recibir el foco al tabular.
+        if (link) link.tabIndex = debe ? 0 : -1
+      }
+      revisar()
+      window.addEventListener('scroll', revisar, { passive: true })
+      window.addEventListener('resize', revisar, { passive: true })
+    }
+
+    // Analítica: los CTA ya emiten el evento. Sin proveedor configurado esto no
+    // hace nada; al añadir gtag/Plausible, los eventos empiezan a registrarse solos.
+    document.querySelectorAll('[data-evt]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const name = el.getAttribute('data-evt')
+        const w = window as any
+        if (typeof w.gtag === 'function') w.gtag('event', name)
+        else if (typeof w.plausible === 'function') w.plausible(name)
+        if (el.hasAttribute('data-form-cta') && typeof w.gtag === 'function') {
+          w.gtag('event', 'form_outbound_click')
+        }
+      })
+    })
+
+    // Conserva los UTM del programa de extraescolares o del mailing al saltar al formulario.
+    const entrada = new URLSearchParams(window.location.search)
+    const utm = [...entrada].filter(([k]) => k.startsWith('utm_'))
+    if (utm.length) {
+      document.querySelectorAll('a[data-form-cta]').forEach((a) => {
+        const el = a as HTMLAnchorElement
+        const sep = el.getAttribute('href')!.includes('?') ? '&' : '?'
+        el.setAttribute('href', el.getAttribute('href') + sep + new URLSearchParams(utm).toString())
+      })
+    }
+  </script>
+</body>
+</html>

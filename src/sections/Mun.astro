@@ -1,0 +1,37 @@
+---
+import Section from '../components/Section.astro'
+import Eyebrow from '../components/Eyebrow.astro'
+import { Image } from 'astro:assets'
+import foto from '../assets/alumnos/paraiso-1.jpg'
+import { mun } from '../data/landing'
+---
+<Section bg="cream" class="!pt-4">
+  <div class="grid gap-12 lg:grid-cols-[0.92fr_1.08fr] lg:items-center lg:gap-16">
+    <figure class="order-2 overflow-hidden lg:order-1" style="border-radius:var(--radius-card-lg)" data-reveal>
+      <Image src={foto} alt="Un alumno del Paraíso sigue una intervención durante un comité"
+             widths={[520, 820, 1200]} sizes="(min-width:1024px) 44vw, 92vw"
+             class="aspect-[4/5] w-full object-cover" loading="lazy" />
+    </figure>
+
+    <div class="order-1 lg:order-2" data-reveal>
+      <Eyebrow>{mun.eyebrow}</Eyebrow>
+      <h2 class="t-h2 font-display font-semibold" style="color:var(--ink)">{mun.title}</h2>
+      <p class="t-lead font-body mt-5 max-w-[52ch]" style="color:rgba(12,26,46,.72)">{mun.lead}</p>
+
+      <p class="font-body mt-7 border-l-2 py-1 pl-5 text-[0.98rem] leading-relaxed"
+         style="border-color:var(--gold);color:rgba(12,26,46,.78)">
+        <strong style="color:var(--ink)">{mun.destacadoStrong}</strong> {mun.destacadoResto}
+      </p>
+
+      <ol class="mt-9 grid gap-6 sm:grid-cols-2" role="list">
+        {mun.pasos.map((p) => (
+          <li>
+            <p class="font-display text-[0.95rem] font-semibold italic" style="color:var(--gold)">{p.n}</p>
+            <h3 class="font-display mt-1 text-[1.12rem] font-semibold" style="color:var(--ink)">{p.title}</h3>
+            <p class="font-body mt-1.5 text-[0.92rem] leading-relaxed" style="color:rgba(12,26,46,.66)">{p.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</Section>

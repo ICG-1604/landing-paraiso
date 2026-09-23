@@ -1,0 +1,48 @@
+---
+import Section from '../components/Section.astro'
+import Eyebrow from '../components/Eyebrow.astro'
+import { practica } from '../data/landing'
+---
+<Section bg="paper" id="practica">
+  <div class="grid gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
+    <div data-reveal>
+      <Eyebrow>{practica.eyebrow}</Eyebrow>
+      <h2 class="t-h2 font-display font-semibold" style="color:var(--ink)">{practica.title}</h2>
+
+      <dl class="mt-9 grid gap-x-10 sm:grid-cols-2">
+        {practica.datos.map((d) => (
+          <div class="border-b py-4" style="border-color:var(--line)">
+            <dt class="font-body text-[0.72rem] font-semibold uppercase"
+                style="letter-spacing:.16em;color:var(--azure)">{d.label}</dt>
+            <dd class="font-body mt-1.5 text-[1rem] font-medium" style="color:var(--ink)">{d.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </div>
+
+    <aside class="self-start p-7 sm:p-8" data-reveal
+           style="background:var(--white);border:1px solid var(--line);border-radius:var(--radius-card-lg);box-shadow:var(--shadow-card)">
+      <p class="font-body text-[0.72rem] font-semibold uppercase"
+         style="letter-spacing:.16em;color:var(--azure)">La cuota</p>
+      <p class="mt-3 flex items-baseline gap-2">
+        <span class="font-display text-[3.4rem] font-semibold leading-none" style="color:var(--navy)">
+          {practica.precioImporte}
+        </span>
+        <span class="font-body text-[1rem]" style="color:rgba(12,26,46,.6)">{practica.precioPeriodo}</span>
+      </p>
+      <ul class="mt-6 grid gap-3" role="list">
+        {practica.precioDetalles.map((d) => (
+          <li class="flex items-start gap-2.5 font-body text-[0.93rem] leading-relaxed"
+              style="color:rgba(12,26,46,.75)">
+            <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"
+                 class="mt-1 shrink-0" style="color:var(--gold)">
+              <path d="M3 8.5l3.2 3.2L13 5" stroke="currentColor" stroke-width="1.9"
+                    stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            {d}
+          </li>
+        ))}
+      </ul>
+    </aside>
+  </div>
+</Section>

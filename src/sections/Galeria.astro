@@ -1,0 +1,31 @@
+---
+import Section from '../components/Section.astro'
+import Eyebrow from '../components/Eyebrow.astro'
+import { Image } from 'astro:assets'
+import f1 from '../assets/alumnos/estumun-paraiso-grupo.jpg'
+import f2 from '../assets/alumnos/estumun-paraiso-4.jpg'
+import f3 from '../assets/alumnos/paraiso-todos.jpg'
+
+// Cada foto se usa una sola vez en toda la página.
+const fotos = [
+  { src: f1, alt: 'Delegación del Colegio Paraíso en EstuMUN', clase: 'col-span-2 sm:row-span-2 aspect-[4/3] sm:aspect-auto' },
+  { src: f2, alt: 'Delegados levantan la placa de su país durante una votación en EstuMUN', clase: 'aspect-square' },
+  { src: f3, alt: 'Alumnos del Paraíso con sus diplomas de participación', clase: 'aspect-square' },
+]
+---
+<Section bg="paper">
+  <div class="max-w-[44ch]" data-reveal>
+    <Eyebrow>Alumnos del Paraíso</Eyebrow>
+    <h2 class="t-h2 font-display font-semibold" style="color:var(--ink)">Así se vive un MUN</h2>
+  </div>
+
+  <ul class="mt-10 grid grid-cols-2 gap-2.5 sm:grid-cols-3" role="list" data-reveal>
+    {fotos.map((f) => (
+      <li class:list={['overflow-hidden', f.clase]} style="border-radius:var(--radius-card)">
+        <Image src={f.src} alt={f.alt} widths={[380, 640, 1000, 1400]}
+               sizes="(min-width:640px) 40vw, 48vw"
+               class="h-full w-full object-cover" loading="lazy" />
+      </li>
+    ))}
+  </ul>
+</Section>

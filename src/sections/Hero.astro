@@ -1,0 +1,62 @@
+---
+import Cta from '../components/Cta.astro'
+import { Image } from 'astro:assets'
+import logo from '../assets/logo.png'
+import { hero } from '../data/landing'
+---
+<section class="relative isolate flex min-h-[92svh] flex-col justify-end overflow-hidden on-dark"
+         style="background:var(--ink)">
+  <!-- Foto de fondo: comité de SYMUN 2025 con alumnos del Paraíso. -->
+  <div class="absolute inset-0 -z-10 bg-cover bg-center"
+       style="background-image:url(/hero-poster.jpg)" aria-hidden="true"></div>
+
+  <!-- Doble velo: vertical para el texto, lateral para que la foto respire a la derecha. -->
+  <div class="absolute inset-0 -z-10" aria-hidden="true"
+       style="background:linear-gradient(to top,rgba(6,14,26,.96) 0%,rgba(6,14,26,.88) 34%,rgba(6,14,26,.55) 68%,rgba(6,14,26,.62) 100%)"></div>
+  <div class="absolute inset-0 -z-10 hidden md:block" aria-hidden="true"
+       style="background:linear-gradient(to right,rgba(6,14,26,.82) 0%,rgba(6,14,26,.45) 55%,transparent 88%)"></div>
+
+  <header class="absolute inset-x-0 top-0 z-10 px-5 sm:px-8 pt-5">
+    <div class="mx-auto flex max-w-[1180px] items-center justify-between">
+      <Image src={logo} alt="MUN en las aulas" width={150} height={112}
+             class="h-8 w-auto sm:h-10" style="filter:brightness(0) invert(1)" loading="eager" />
+      <a href="#practica" class="font-body text-sm font-medium no-underline hover:opacity-80"
+         style="color:var(--on-dark)">Información práctica</a>
+    </div>
+  </header>
+
+  <div id="contenido" class="relative mx-auto w-full max-w-[1180px] px-5 sm:px-8 pb-14 pt-32 sm:pb-20">
+    <p class="mb-5 inline-flex items-center rounded-full border px-3.5 py-1.5 font-body text-[0.78rem] font-medium"
+       style="border-color:rgba(255,255,255,.28);background:rgba(255,255,255,.10);color:var(--on-dark)">
+      {hero.pill}
+    </p>
+
+    <h1 class="t-h1 font-display max-w-[16ch] font-semibold" style="color:#fff">
+      {hero.claim}<br />
+      <em class="italic" style="color:var(--gold-bright)">{hero.claimEm}</em>
+    </h1>
+
+    <p class="t-lead font-body mt-6 max-w-[54ch]" style="color:rgba(255,255,255,.86)">
+      {hero.lead}
+    </p>
+
+    <div class="mt-9 flex flex-col items-start gap-3">
+      <Cta evt="cta_hero_click" origen="hero" class="w-full sm:w-auto">{hero.cta}</Cta>
+      <p class="font-body text-[0.83rem]" style="color:rgba(255,255,255,.72)">{hero.ctaMicro}</p>
+    </div>
+
+    <ul class="mt-10 grid gap-x-8 gap-y-2.5 sm:grid-cols-2 lg:flex lg:flex-wrap lg:gap-x-7" role="list">
+      {hero.facts.map((f) => (
+        <li class="flex items-start gap-2.5 font-body text-[0.92rem] font-medium"
+            style="color:rgba(255,255,255,.92)">
+          <svg width="15" height="15" viewBox="0 0 16 16" fill="none" aria-hidden="true"
+               class="mt-1 shrink-0" style="color:var(--gold-bright)">
+            <path d="M3 8.5l3.2 3.2L13 5" stroke="currentColor" stroke-width="1.9"
+                  stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          {f}
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>

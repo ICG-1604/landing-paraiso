@@ -1,0 +1,20 @@
+---
+import Cta from './Cta.astro'
+import { stickyCta } from '../data/landing'
+---
+<!-- Entra al pasar el hero: mientras el CTA principal está a la vista, sobra. -->
+<div
+  id="sticky-cta"
+  class="fixed inset-x-0 bottom-0 z-50 px-3 pt-2 md:hidden"
+  style="padding-bottom:calc(0.5rem + env(safe-area-inset-bottom,0px));background:linear-gradient(to top,rgba(12,26,46,.92),rgba(12,26,46,0));transform:translateY(115%);transition:transform .35s cubic-bezier(.2,.7,.2,1)"
+  aria-hidden="true"
+>
+  <Cta evt="cta_sticky_click" origen="sticky" block>{stickyCta}</Cta>
+</div>
+
+<style>
+  #sticky-cta.is-visible { transform: none !important; }
+  @media (prefers-reduced-motion: reduce) {
+    #sticky-cta { transition: none !important; }
+  }
+</style>

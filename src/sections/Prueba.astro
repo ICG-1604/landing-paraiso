@@ -1,0 +1,28 @@
+---
+import Section from '../components/Section.astro'
+import Eyebrow from '../components/Eyebrow.astro'
+import Cta from '../components/Cta.astro'
+import { prueba } from '../data/landing'
+---
+<Section bg="cream" id="prueba">
+  <div class="max-w-[52ch]" data-reveal>
+    <Eyebrow>{prueba.eyebrow}</Eyebrow>
+    <h2 class="t-h2 font-display font-semibold" style="color:var(--ink)">{prueba.title}</h2>
+    <p class="t-lead font-body mt-5" style="color:rgba(12,26,46,.72)">{prueba.lead}</p>
+  </div>
+
+  <ol class="mt-12 grid gap-x-6 gap-y-8 sm:grid-cols-2 lg:grid-cols-4" role="list">
+    {prueba.pasos.map((p, i) => (
+      <li class="relative" data-reveal style={`transition-delay:${i * 80}ms`}>
+        <span class="font-display block text-[2.4rem] font-semibold leading-none"
+              style="color:var(--gold-soft)">{p.n}</span>
+        <h3 class="font-display mt-3 text-[1.1rem] font-semibold" style="color:var(--ink)">{p.title}</h3>
+        <p class="font-body mt-2 text-[0.93rem] leading-relaxed" style="color:rgba(12,26,46,.66)">{p.text}</p>
+      </li>
+    ))}
+  </ol>
+
+  <div class="mt-12" data-reveal>
+    <Cta evt="cta_trial_click" origen="prueba" class="w-full sm:w-auto">{prueba.cta}</Cta>
+  </div>
+</Section>

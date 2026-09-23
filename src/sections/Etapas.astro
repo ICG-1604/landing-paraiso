@@ -1,0 +1,50 @@
+---
+import Section from '../components/Section.astro'
+import Eyebrow from '../components/Eyebrow.astro'
+import { Image } from 'astro:assets'
+import foto from '../assets/alumnos/paraiso.jpg'
+import { etapas } from '../data/landing'
+---
+<Section bg="cream" id="es-para-tu-hijo">
+  <div class="grid gap-12 lg:grid-cols-[1fr_1.05fr] lg:items-start lg:gap-16">
+    <div data-reveal>
+      <Eyebrow>{etapas.eyebrow}</Eyebrow>
+      <h2 class="t-h2 font-display font-semibold" style="color:var(--ink)">{etapas.title}</h2>
+      <p class="t-lead font-body mt-5 max-w-[46ch]" style="color:rgba(12,26,46,.72)">{etapas.lead}</p>
+
+      <figure class="mt-10 overflow-hidden" style="border-radius:var(--radius-card-lg)">
+        <Image src={foto} alt="Alumnos del Colegio Paraíso durante un comité"
+               widths={[480, 760, 1100]} sizes="(min-width:1024px) 46vw, 92vw"
+               class="aspect-[4/3] w-full object-cover" loading="lazy" />
+      </figure>
+    </div>
+
+    <!-- La respuesta que busca la familia no es el calendario, es qué se lleva su hijo. -->
+    <div class="lg:pt-2" data-reveal>
+      <p class="font-body text-[0.72rem] font-semibold uppercase"
+         style="letter-spacing:.2em;color:var(--azure)">{etapas.tituloDerecha}</p>
+
+      <ul class="mt-6" role="list">
+        {etapas.llevaConsigo.map((linea, i) => (
+          <li
+            class="flex items-baseline gap-5 border-b py-5 first:border-t"
+            style="border-color:var(--line)"
+          >
+            <span class="font-display shrink-0 text-[0.95rem] font-semibold italic tabular-nums"
+                  style="color:var(--gold)" aria-hidden="true">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <span class="font-display text-[1.32rem] font-semibold leading-tight sm:text-[1.55rem]"
+                  style="color:var(--ink)">
+              {linea}
+            </span>
+          </li>
+        ))}
+      </ul>
+
+      <p class="font-body mt-7 text-[1rem] italic" style="color:rgba(12,26,46,.6)">
+        {etapas.cierreDerecha}
+      </p>
+    </div>
+  </div>
+</Section>

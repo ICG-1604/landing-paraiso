@@ -1,0 +1,24 @@
+---
+interface Props {
+  id?: string
+  bg?: 'cream' | 'paper' | 'dark'
+  class?: string
+  wide?: boolean
+}
+const { id, bg = 'cream', class: cls = '', wide = false } = Astro.props
+
+const bgMap = {
+  cream: { background: 'var(--cream)', color: 'var(--ink)' },
+  paper: { background: 'var(--paper)', color: 'var(--ink)' },
+  dark:  { background: 'var(--ink)',   color: 'var(--on-dark)' },
+}
+---
+<section
+  id={id}
+  class:list={['w-full py-16 sm:py-24 px-5 sm:px-8', bg === 'dark' && 'on-dark', cls]}
+  style={bgMap[bg]}
+>
+  <div class={wide ? 'max-w-[1320px] mx-auto' : 'max-w-[1180px] mx-auto'}>
+    <slot />
+  </div>
+</section>
